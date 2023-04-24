@@ -32,8 +32,8 @@ public class CarRentalServiceApplication {
 	static List<Customer> Customers = new ArrayList<>();
 	static List<Rental> Rentals = new ArrayList<>();
 	static int lastCarid=0;
-	static int lastCustomerid=0;
-	static int lastrentalid=0;
+	static int lastCustomerId =0;
+	static int lastRentalId =0;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CarRentalServiceApplication.class, args);
@@ -67,27 +67,27 @@ public class CarRentalServiceApplication {
 	}
 
 	public static Customer getCustomer(String Email, String Password){
-		return null;
+		return Customers.stream().filter(customer -> Email==customer.getEmail() & Password==customer.getPassword()).findAny().orElse(null);
 	}
 
 	public static void deleteSession(int SessionID){
 
 	}
 
-	public static void editcustomer(){
+	public static void editCustomer(){
 
 	}
 
-	public static void getCustomerDetails(){
+	public static void getCustomerDetails(String PassportNumber){
 
 	}
 
-	public static void deleteCustomer(){
-
+	public static void deleteCustomer(String PassportNumber){
+		Customers.removeIf(customer -> PassportNumber== customer.getPassportNumber());
 	}
 
-	public static void getRentals(){
-
+	public static Rental getRentals(String RentalID){
+		return Rentals.stream().filter(rental -> RentalID== rental.getRentalID()).findAny().orElse(null);
 	}
 
 	public static void createRental(){
