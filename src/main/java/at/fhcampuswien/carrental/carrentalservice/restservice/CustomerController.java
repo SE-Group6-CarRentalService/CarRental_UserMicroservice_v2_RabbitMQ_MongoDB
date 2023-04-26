@@ -17,22 +17,14 @@ public class CustomerController {
     static int lastCustomerId =0;
     static int lastSessionId =0;
 
-    @PostMapping("v1/Customers/register")
-    String getCustomers(@RequestBody Customer newCustomer)
-    {
-        lastCustomerId = lastCustomerId+1;
-
-        //Customer CustomertoAdd = new Customer(lastCustomerid,Model,Year,Price,Automatic,Mileage,Fuel,InitialLocation);
-
-        Customers.add(newCustomer);
-
-        return "Customer was registered";
-    }
 
 
     //TODO:was bedeutet (Control afterwards)?
     @GetMapping("v1/Customers/login")
     Session getCustomer(@RequestBody List<String> credentials) {
+
+
+        //TODO:Datenbank nach customers prüfen
         if (null!=Customers.stream().filter(customer -> credentials.get(0)==customer.getEmail() & credentials.get(1)==customer.getPassword()).findAny().orElse(null))
         {
             lastSessionId = lastSessionId +1;
@@ -66,6 +58,7 @@ public class CustomerController {
 
             //Customer CustomertoAdd = new Customer(lastCustomerid,Model,Year,Price,Automatic,Mileage,Fuel,InitialLocation);
 
+            //TODO:CUSTOMER in die Datenbank
             Customers.add(newCustomer);
 
             return "Customer was registered";
@@ -74,6 +67,7 @@ public class CustomerController {
             return "email already registered";
         }
     }
+
 
     @PutMapping("v1/Customers/{sessionID}")
     String editCustomer(@PathVariable int sessionID,@RequestBody Customer editedCustomer){
