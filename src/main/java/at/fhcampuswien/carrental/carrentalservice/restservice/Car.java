@@ -1,11 +1,20 @@
 package at.fhcampuswien.carrental.carrentalservice.restservice;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Date;
 
 
+@Entity
+//@Document(collection="user") //for mongoDB
 public class Car{
 
-    private int ID;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
     private String Model;
     private Date Year;
     private double Price;
@@ -14,8 +23,18 @@ public class Car{
     private String Fuel;
     private String Location;
 
-    public Car(int ID, String model, Date year, double price, boolean automatic, int mileage, String fuel, String location) {
-        this.ID = ID;
+   public Car(){}
+
+    public Car( String model, Date year, double price, boolean automatic, int mileage, String fuel, String location) {
+        //this.ID = ID;
+        this.Model = model;
+        this.Year = year;
+        this.Price = price;
+        this.Automatic = automatic;
+        this.Mileage = mileage;
+        this.Fuel = fuel;
+        this.Location = location;
+        /*
         Model = model;
         Year = year;
         Price = price;
@@ -23,15 +42,17 @@ public class Car{
         Mileage = mileage;
         Fuel = fuel;
         Location = location;
+
+         */
     }
 
 
     public int getID() {
-        return ID;
+        return id;
     }
 
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setID(int id) {
+        this.id = id;
     }
 
     public String getModel() {

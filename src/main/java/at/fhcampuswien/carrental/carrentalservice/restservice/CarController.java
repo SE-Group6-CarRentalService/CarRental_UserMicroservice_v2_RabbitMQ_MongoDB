@@ -1,15 +1,20 @@
 package at.fhcampuswien.carrental.carrentalservice.restservice;
 
 
+import at.fhcampuswien.carrental.carrentalservice.repository.CarRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 
 @RestController
 public class CarController {
+
+    @Autowired
+    private CarRepository repo;
 
     static List<Car> Cars = new ArrayList<>();
 
@@ -21,7 +26,8 @@ public class CarController {
     List<Car> getCars() {
 
         //TODO:Alle Cars von der DB holen
-        return Cars;
+
+        return (List<Car>) repo.findAll();
     }
 
     @GetMapping("v1/Cars/{id}")
@@ -44,10 +50,12 @@ public class CarController {
     }
 
     @DeleteMapping("v1/Cars/{id}")
-    String deleteEmployee(@PathVariable Long id) {
+    String deleteEmployee(@PathVariable(value = "id") int id) {
 
         //TODO: car von der datenbank löschen
         Cars.removeIf(car -> id==car.getID());
+        //repo.deleteCarBy(id);
+        repo.deleteAllById(id);
         return "Car was deleted";
     }
 

@@ -18,6 +18,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 */
 
 import at.fhcampuswien.carrental.carrentalservice.restservice.*;
+import org.springframework.context.annotation.ComponentScan;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -25,6 +26,7 @@ import java.util.List;
 
 @SpringBootApplication(exclude = { SecurityAutoConfiguration.class })
 @ConfigurationPropertiesScan
+
 //@EnableSwagger2
 public class CarRentalServiceApplication {
 
