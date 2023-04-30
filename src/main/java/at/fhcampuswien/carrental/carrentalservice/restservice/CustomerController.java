@@ -21,21 +21,22 @@ public class CustomerController {
 
     //TODO:was bedeutet (Control afterwards)?
     @GetMapping("v1/Customers/login")
-    Session getCustomer(@RequestBody List<String> credentials) {
+    Session getCustomer(@RequestParam String email, @RequestParam String passwordHash) {
 
 
         //TODO:Datenbank nach customers prüfen
-        if (null!=Customers.stream().filter(customer -> credentials.get(0)==customer.getEmail() & credentials.get(1)==customer.getPassword()).findAny().orElse(null))
-        {
-            lastSessionId = lastSessionId +1;
-            Session newSession = new Session(lastSessionId,credentials.get(0));
-            Sessions.add(newSession);
-            return newSession;
-        }
-        else
-        {
-            return null;
-        }
+//        if (null!=Customers.stream().filter(customer -> email & credentials.get(1)==customer.getPassword()).findAny().orElse(null))
+//        {
+//            lastSessionId = lastSessionId +1;
+//            Session newSession = new Session(lastSessionId,credentials.get(0));
+//            Sessions.add(newSession);
+//            return newSession;
+//        }
+//        else
+//        {
+//            return null;
+//        }
+        return null;
     }
     @GetMapping("v1/Customers/logout")
     String deleteSession(@RequestBody Integer session) {
@@ -68,55 +69,56 @@ public class CustomerController {
         }
     }
 
+//TODO Change User attributes later on
 
-    @PutMapping("v1/Customers/{sessionID}")
-    String editCustomer(@PathVariable int sessionID,@RequestBody Customer editedCustomer){
+//    @PutMapping("v1/Customers/{sessionID}")
+//    String editCustomer(@PathVariable int sessionID,@RequestBody Customer editedCustomer){
+//
+//        if (null==Sessions.stream().filter(session -> sessionID==session.getSessionID()).findAny().orElse(null))
+//        {
+//            //TODO:Customer wird in der Datenbank erstezt/Attribute verändert
+//            return "User info has been changed";
+//        }
+//        else
+//        {
+//            return "no session under that id";
+//        }
+//
+//    }
 
-        if (null==Sessions.stream().filter(session -> sessionID==session.getSessionID()).findAny().orElse(null))
-        {
-            //TODO:Customer wird in der Datenbank erstezt/Attribute verändert
-            return "User info has been changed";
-        }
-        else
-        {
-            return "no session under that id";
-        }
+//    @GetMapping("v1/Customers/{sessionID}")
+//    Customer getCustomerDetails(@PathVariable Integer sessionID){
+//
+//        Session currentSession =Sessions.stream().filter(session -> sessionID==session.getSessionID()).findAny().orElse(null);
+//
+//        if (Sessions.contains(currentSession))
+//        {
+//            //TODO: Customer von der Datenbank holen
+//            return Customers.stream().filter(customer -> currentSession.getAccountMail() == customer.getEmail()).findAny().orElse(null);
+//        }
+//        else
+//        {
+//            return null;
+//        }
+//
+//    }
 
-    }
-
-    @GetMapping("v1/Customers/{sessionID}")
-    Customer getCustomerDetails(@PathVariable Integer sessionID){
-
-        Session currentSession =Sessions.stream().filter(session -> sessionID==session.getSessionID()).findAny().orElse(null);
-
-        if (Sessions.contains(currentSession))
-        {
-            //TODO: Customer von der Datenbank holen
-            return Customers.stream().filter(customer -> currentSession.getAccountMail() == customer.getEmail()).findAny().orElse(null);
-        }
-        else
-        {
-            return null;
-        }
-
-    }
-
-    @DeleteMapping("v1/Customers/{sessionID}")
-    String deleteCustomer(@PathVariable int sessionID,@RequestBody Customer editedCustomer){
-
-        Session currentSession =Sessions.stream().filter(session -> sessionID==session.getSessionID()).findAny().orElse(null);
-
-        if (null==currentSession)
-        {
-            //TODO:Customer wird von der Datenbank gelöscht
-            Customers.removeIf(Customer -> currentSession.getAccountMail()==Customer.getEmail());
-            return "Account has been deleted";
-        }
-        else
-        {
-            return "no session under that id";
-        }
-
-    }
+//    @DeleteMapping("v1/Customers/{sessionID}")
+//    String deleteCustomer(@PathVariable int sessionID,@RequestBody Customer editedCustomer){
+//
+//        Session currentSession =Sessions.stream().filter(session -> sessionID==session.getSessionID()).findAny().orElse(null);
+//
+//        if (null==currentSession)
+//        {
+//            //TODO:Customer wird von der Datenbank gelöscht
+//            Customers.removeIf(Customer -> currentSession.getAccountMail()==Customer.getEmail());
+//            return "Account has been deleted";
+//        }
+//        else
+//        {
+//            return "no session under that id";
+//        }
+//
+//    }
 
 }

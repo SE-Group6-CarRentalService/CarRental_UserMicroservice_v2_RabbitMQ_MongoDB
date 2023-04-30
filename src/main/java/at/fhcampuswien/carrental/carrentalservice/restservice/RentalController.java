@@ -13,26 +13,26 @@ public class RentalController {
 
     static int lastRentalId =0;
 
-    @GetMapping("v1/rentals")
-    List<Rental> getRental() {
-        //TODO: alle rentals werden von der Datenbank geholt
-        return Rentals;
-    }
+//    @GetMapping("v1/rentals")
+//    List<Rental> getRental() {
+//        //TODO: alle rentals werden von der Datenbank geholt
+//        return Rentals;
+//    }
     @PostMapping("v1/rentals")
     String createRental(@RequestBody Rental newRental) {
         //TODO: rental wird in die DB hinzugefügt
         return "Rental was created";
     }
 
-    @PutMapping("v1/rentals/{id}")
-    String editRental(@PathVariable int RentalId) {
-        //TODO: rental wird in der DB ersetzt oder Attribute verändert
-        return "Rental information was edited";
-    }
+//    @PutMapping("v1/rentals/{id}")
+//    String editRental(@PathVariable int RentalId) {
+//        //TODO: rental wird in der DB ersetzt oder Attribute verändert
+//        return "Rental information was edited";
+//    }
 
     @GetMapping("v1/rentals/{id}")
-    Rental getRentalDetails(@PathVariable int RentalId) {
-        //TODO: Rental wird von der DB geholt
+    Rental getRentalDetails(@PathVariable int CustomerId) {
+        //TODO: All rentals for the user will be fetched from DB
         return null;
     }
 
