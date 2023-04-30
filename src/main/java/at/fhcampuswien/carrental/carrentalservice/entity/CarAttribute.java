@@ -13,6 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CarAttribute {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "car_id", nullable = false)
@@ -22,5 +23,39 @@ public class CarAttribute {
     private String modelName;
 
     @Column(name = "cylinder")
-    private String cylinder;
+    private int cylinder;
+
+    @Column(name = "price_usd")
+    private int priceusd;
+
+    @Column(name = "horsepower")
+    private int horsepower;
+
+    @Column(name = "weight_in_lbs")
+    private int weightInlbs;
+
+    @Column(name = "acceleration")
+    private int acceleration;
+
+    @Column(name = "year")
+    private String year;
+
+    @Column(name = "origin")
+    private String origin;
+
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "fuel")
+    private String fuel;
+
+    @Column(name = "mileage_km")
+    private int mileageKm;
+
+    @Column(name = "automatic")
+    private boolean automatic;
+
+    @Column(name = "rental_id")
+    private String rentalId;
+
 }

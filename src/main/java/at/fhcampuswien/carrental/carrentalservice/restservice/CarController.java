@@ -1,6 +1,7 @@
 package at.fhcampuswien.carrental.carrentalservice.restservice;
 
 
+
 import at.fhcampuswien.carrental.carrentalservice.entity.CarAttribute;
 import at.fhcampuswien.carrental.carrentalservice.repository.CarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -25,17 +27,21 @@ public class CarController {
 
     @GetMapping("v1/Cars")
     List<CarAttribute> getCars() {
-
-        //TODO:Alle Cars von der DB holen
-
         return (List<CarAttribute>) repo.findAll();
     }
 
     @GetMapping("v1/Cars/{id}")
-    CarAttribute getCar(@PathVariable int id)
-    {
-        //TODO ein Car von der DB holen
-        return Cars.stream().filter(car -> id==car.getId()).findAny().orElse(null);
+    CarAttribute getCar(@PathVariable int id){
+
+        Optional<CarAttribute> optionalcar = repo.findById(id);
+
+        if(!optionalcar.isPresent()){
+            return null;
+        }
+        else{
+            return optionalcar.get();
+        }
+
     }
 
     //TODO Implement code later

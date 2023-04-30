@@ -11,4 +11,5 @@ import java.util.List;
 public interface CarRepository extends CrudRepository<CarAttribute, Integer> {
     void deleteAllById(int id);
 
+
 }

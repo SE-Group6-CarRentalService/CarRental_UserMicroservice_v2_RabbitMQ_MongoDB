@@ -1,10 +1,15 @@
 package at.fhcampuswien.carrental.carrentalservice.restservice;
 
 
+import at.fhcampuswien.carrental.carrentalservice.entity.CustomerAttribute;
+import at.fhcampuswien.carrental.carrentalservice.repository.CarRepository;
+import at.fhcampuswien.carrental.carrentalservice.repository.CustomerRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 
@@ -12,6 +17,8 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class CustomerController {
 
+    @Autowired
+    private CustomerRepository repo;
     static List<Session> Sessions = new ArrayList<>();
     static List<Customer> Customers = new ArrayList<>();
     static int lastCustomerId =0;
@@ -23,21 +30,22 @@ public class CustomerController {
     @GetMapping("v1/Customers/login")
     Session getCustomer(@RequestParam String email, @RequestParam String passwordHash) {
 
+        CustomerAttribute Customer = repo.findByEmail(email).get(0);
 
-        //TODO:Datenbank nach customers prüfen
-//        if (null!=Customers.stream().filter(customer -> email & credentials.get(1)==customer.getPassword()).findAny().orElse(null))
-//        {
-//            lastSessionId = lastSessionId +1;
-//            Session newSession = new Session(lastSessionId,credentials.get(0));
-//            Sessions.add(newSession);
-//            return newSession;
-//        }
-//        else
-//        {
-//            return null;
-//        }
-        return null;
+        if(Customer.getPassword()==passwordHash) {
+
+            Session newSession = new Session(lastSessionId, email);
+            Sessions.add(newSession);
+            lastSessionId++;
+
+            return newSession;
+
+        }
+        else{
+            return null;
+        }
     }
+
     @GetMapping("v1/Customers/logout")
     String deleteSession(@RequestBody Integer session) {
         if (Sessions.contains(session))
@@ -50,20 +58,17 @@ public class CustomerController {
             return "no session under that id";
         }
     }
+
     @PostMapping("v1/Customers/register")
-    String registerCustomer(@RequestBody Customer newCustomer) {
+    String registerCustomer(@RequestBody CustomerAttribute newCustomer) {
 
-        if(null==Customers.stream().filter(customer -> newCustomer.getEmail()==customer.getEmail()).findAny().orElse(null)) {
+        if(!repo.findByEmail(newCustomer.getEmail()).isEmpty()) {
 
-            lastCustomerId = lastCustomerId + 1;
-
-            //Customer CustomertoAdd = new Customer(lastCustomerid,Model,Year,Price,Automatic,Mileage,Fuel,InitialLocation);
-
-            //TODO:CUSTOMER in die Datenbank
-            Customers.add(newCustomer);
+            repo.save(newCustomer);
 
             return "Customer was registered";
         }
+
         else{
             return "email already registered";
         }
