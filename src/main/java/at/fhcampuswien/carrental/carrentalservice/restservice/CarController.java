@@ -4,8 +4,8 @@ package at.fhcampuswien.carrental.carrentalservice.restservice;
 
 import at.fhcampuswien.carrental.carrentalservice.entity.CarAttribute;
 import at.fhcampuswien.carrental.carrentalservice.repository.CarRepository;
+import at.fhcampuswien.carrental.carrentalservice.services.CurrencyConverter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -19,24 +19,19 @@ public class CarController {
     @Autowired
     private CarRepository repo;
 
-    static List<CarAttribute> Cars = new ArrayList<CarAttribute>();
+    CurrencyConverter currencyConverter = new CurrencyConverter();
 
     @GetMapping("v1/Cars")
-    List<CarAttribute> getCars() {
-        return (List<CarAttribute>) repo.findAll();
+    List<CarAttribute> getCars(@RequestParam(defaultValue = "USD") String currency) {
+        return convertCurrency(currency,repo.findAll());
     }
 
     @GetMapping("v1/Cars/{id}")
     CarAttribute getCar(@PathVariable int id){
 
-        Optional<CarAttribute> optionalcar = repo.findById(id);
+        Optional<CarAttribute> optionalCar = repo.findById(id);
 
-        if(!optionalcar.isPresent()){
-            return null;
-        }
-        else{
-            return optionalcar.get();
-        }
+        return optionalCar.orElse(null);
 
     }
 
@@ -52,14 +47,17 @@ public class CarController {
         return "No value found";
     }
 
-//    @DeleteMapping("v1/Cars/{id}")
-//    String deleteEmployee(@PathVariable(value = "id") int id) {
-//
-//        //TODO: car von der datenbank löschen
-//        Cars.removeIf(car -> id==car.getID());
-//        //repo.deleteCarBy(id);
-//        repo.deleteAllById(id);
-//        return "Car was deleted";
-//    }
+    private List<CarAttribute> convertCurrency(String currency, Iterable<CarAttribute> carAttributes){
+        List<CarAttribute> carList = new ArrayList<>();
+        for (CarAttribute carAttribute : carAttributes) {
+            carAttribute.setPriceusd(currencyConverter.convertCurrency(currency, carAttribute.getPriceusd()));
+            carList.add(carAttribute);
+        }
+
+        if (carList.isEmpty()){
+            return null;
+        }
+        return carList;
+    }
 
 }

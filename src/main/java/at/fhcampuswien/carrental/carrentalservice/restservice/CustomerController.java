@@ -1,18 +1,14 @@
 package at.fhcampuswien.carrental.carrentalservice.restservice;
 
 
-import at.fhcampuswien.carrental.carrentalservice.entity.CarAttribute;
 import at.fhcampuswien.carrental.carrentalservice.entity.CustomerAttribute;
-import at.fhcampuswien.carrental.carrentalservice.repository.CarRepository;
 import at.fhcampuswien.carrental.carrentalservice.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicLong;
-
+import java.util.Objects;
 
 
 @RestController
@@ -34,7 +30,7 @@ public class CustomerController {
 
         CustomerAttribute Customer = repo.findByEmail(email).get(0);
 
-        if(Customer.getPassword()==passwordHash) {
+        if(Objects.equals(Customer.getPassword(), passwordHash)) {
 
             Session newSession = new Session(lastSessionId, email);
             Sessions.add(newSession);

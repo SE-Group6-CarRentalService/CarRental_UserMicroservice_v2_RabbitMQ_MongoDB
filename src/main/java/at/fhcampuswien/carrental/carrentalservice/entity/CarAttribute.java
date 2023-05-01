@@ -26,7 +26,7 @@ public class CarAttribute {
     private int cylinder;
 
     @Column(name = "price_usd")
-    private int priceusd;
+    private double priceusd;
 
     @Column(name = "horsepower")
     private int horsepower;

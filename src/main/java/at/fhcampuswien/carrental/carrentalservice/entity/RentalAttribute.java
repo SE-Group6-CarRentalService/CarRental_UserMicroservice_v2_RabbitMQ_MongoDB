@@ -39,5 +39,5 @@ public class RentalAttribute {
     private String returnDate;
 
     @Column(name = "total_cost")
-    private int totalCost;
+    private double totalCost;
 }
