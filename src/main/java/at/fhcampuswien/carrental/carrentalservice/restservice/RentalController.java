@@ -5,9 +5,8 @@ import at.fhcampuswien.carrental.carrentalservice.repository.RentalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
+
 
 @RestController
 public class RentalController {
@@ -15,15 +14,11 @@ public class RentalController {
     @Autowired
     RentalRepository repo;
 
-    static List<Rental> Rentals = new ArrayList<>();
+    @GetMapping("v1/rentals")
+    List<RentalAttribute> getRentals() {
+    return (List<RentalAttribute>) repo.findAll();
+}
 
-    static int lastRentalId =0;
-
-//    @GetMapping("v1/rentals")
-//    List<Rental> getRental() {
-//        //TODO: alle rentals werden von der Datenbank geholt
-//        return Rentals;
-//    }
     @PostMapping("v1/rentals")
     String createRental(@RequestBody RentalAttribute newRental) {
         //TODO: rental wird in die DB hinzugefügt

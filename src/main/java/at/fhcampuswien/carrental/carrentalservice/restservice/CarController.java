@@ -21,10 +21,6 @@ public class CarController {
 
     static List<CarAttribute> Cars = new ArrayList<CarAttribute>();
 
-    static int lastCarid=0;
-
-    static int lastRentalId =0;
-
     @GetMapping("v1/Cars")
     List<CarAttribute> getCars() {
         return (List<CarAttribute>) repo.findAll();
@@ -44,18 +40,17 @@ public class CarController {
 
     }
 
-    //TODO Implement code later
-//    @PostMapping("v1/Cars")
-//    String saveCar(@RequestBody CarAttribute newCar) {
-//
-//        lastCarid = lastCarid+1;
-//
-//        //Car CartoAdd = new Car(lastCarid,Model,Year,Price,Automatic,Mileage,Fuel,InitialLocation);
-//        //TODO car in die DB speichern
-//        Cars.add(newCar);
-//
-//        return "Car was saved";
-//    }
+    @PostMapping("v1/Cars")
+    String saveCar(@RequestBody List<CarAttribute> newCar) {
+
+        if (!newCar.isEmpty()){
+            repo.saveAll(newCar);
+            return "Cars were saved";
+        }
+
+
+        return "No value found";
+    }
 
 //    @DeleteMapping("v1/Cars/{id}")
 //    String deleteEmployee(@PathVariable(value = "id") int id) {

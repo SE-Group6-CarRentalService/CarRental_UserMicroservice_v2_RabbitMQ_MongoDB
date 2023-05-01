@@ -1,6 +1,7 @@
 package at.fhcampuswien.carrental.carrentalservice.restservice;
 
 
+import at.fhcampuswien.carrental.carrentalservice.entity.CarAttribute;
 import at.fhcampuswien.carrental.carrentalservice.entity.CustomerAttribute;
 import at.fhcampuswien.carrental.carrentalservice.repository.CarRepository;
 import at.fhcampuswien.carrental.carrentalservice.repository.CustomerRepository;
@@ -20,13 +21,14 @@ public class CustomerController {
     @Autowired
     private CustomerRepository repo;
     static List<Session> Sessions = new ArrayList<>();
-    static List<Customer> Customers = new ArrayList<>();
-    static int lastCustomerId =0;
     static int lastSessionId =0;
 
 
+    @GetMapping("v1/Customers")
+    List<CustomerAttribute> getCustomers() {
+        return (List<CustomerAttribute>) repo.findAll();
+    }
 
-    //TODO:was bedeutet (Control afterwards)?
     @GetMapping("v1/Customers/login")
     Session getCustomer(@RequestParam String email, @RequestParam String passwordHash) {
 
@@ -61,9 +63,9 @@ public class CustomerController {
 
     @PostMapping("v1/Customers/register")
     String registerCustomer(@RequestBody CustomerAttribute newCustomer) {
-
-        if(!repo.findByEmail(newCustomer.getEmail()).isEmpty()) {
-
+        if(repo.findByEmail(newCustomer.getEmail()).isEmpty()) {
+            CustomerAttribute newCustomerID = new CustomerAttribute();
+            newCustomer.setId(newCustomerID.getId());
             repo.save(newCustomer);
 
             return "Customer was registered";
