@@ -12,6 +12,7 @@ import java.util.Objects;
 
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 public class CustomerController {
 
     @Autowired
