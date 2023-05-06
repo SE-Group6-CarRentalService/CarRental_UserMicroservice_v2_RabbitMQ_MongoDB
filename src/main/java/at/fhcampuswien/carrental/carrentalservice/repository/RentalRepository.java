@@ -15,4 +15,5 @@ public interface RentalRepository extends CrudRepository<RentalAttribute, Intege
 
     List<RentalAttribute> findByCustomerId(int customerId);
 
+    //List<RentalAttribute> findRentalByRentalID(int rentalId);
 }

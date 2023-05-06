@@ -43,8 +43,18 @@ public class RentalController {
     }
 
 //    @PutMapping("v1/rentals/{id}")
-//    String editRental(@PathVariable int RentalId) {
+//    String editRental(@PathVariable int RentalId, @Request) {
 //        //TODO: rental wird in der DB ersetzt oder Attribute verändert
+//
+//        RentalAttribute rentalToEdit = (RentalAttribute) repo.findRentalByRentalID(RentalId);
+//        if(rentalToEdit.getId() == RentalId)
+//        {
+//
+//        } else
+//        {
+//            return "Rental not found";
+//        }
+//
 //        return "Rental information was edited";
 //    }
 

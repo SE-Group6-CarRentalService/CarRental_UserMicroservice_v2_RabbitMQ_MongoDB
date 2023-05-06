@@ -3,9 +3,14 @@ package at.fhcampuswien.carrental.carrentalservice.restservice;
 
 import at.fhcampuswien.carrental.carrentalservice.entity.CustomerAttribute;
 import at.fhcampuswien.carrental.carrentalservice.repository.CustomerRepository;
+import org.springframework.amqp.core.DirectExchange;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -15,17 +20,86 @@ import java.util.Objects;
 @CrossOrigin(origins = "*")
 public class CustomerController {
 
+    CustomerAttribute customerAttribute;
+
     @Autowired
     private CustomerRepository repo;
     static List<Session> Sessions = new ArrayList<>();
     static int lastSessionId =0;
 
 
+    @RabbitListener(queues = "carRental.rpc.requests")
     @GetMapping("v1/Customers")
-    List<CustomerAttribute> getCustomers() {
-        return (List<CustomerAttribute>) repo.findAll();
+    public String carRentalRpcFunctionCall(String serializedCustomerObjectWithFunctionInfoAddition) throws IOException, ClassNotFoundException {
+
+        CustomerAttribute deserializedCustomerObject = (CustomerAttribute) CustomerAttribute.deserializeFromString(serializedCustomerObjectWithFunctionInfoAddition);
+
+        switch(deserializedCustomerObject.getFunctionCallName()) {
+            case "getCustomers":
+                System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
+                List<CustomerAttribute> allCustomer = (List<CustomerAttribute>) repo.findAll();
+                //return allCustomer;
+                return CustomerAttribute.serializeToString((Serializable) allCustomer);
+
+            case "getCustomer":
+                System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
+
+                //CustomerAttribute Customer = repo.findByEmail(deserializedCustomerObject.getEmail()).get(0);
+                CustomerAttribute Customer = (CustomerAttribute) repo.findByEmail(deserializedCustomerObject.getEmail());
+
+                if(Objects.equals(Customer.getPassword(), deserializedCustomerObject.getPasswordHash())) {
+
+                    Session newSession = new Session(lastSessionId, deserializedCustomerObject.getEmail());
+                    Sessions.add(newSession);
+                    lastSessionId++;
+
+                    return Session.serializeToString(newSession);
+                }
+                else{
+                    return null;
+                }
+
+            case "deleteSession":
+                System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
+
+
+
+                if (Sessions.contains(deserializedCustomerObject.getSession()))
+                {
+                    Sessions.remove(deserializedCustomerObject.getSession());
+                    return "User has been logged out";
+                }
+                else
+                {
+                    return "no session under that id";
+                }
+
+            case "registerCustomer":
+                System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
+
+                if(repo.findByEmail(deserializedCustomerObject.getEmail()).isEmpty()) {
+                    CustomerAttribute newCustomerID = new CustomerAttribute();
+                    deserializedCustomerObject.setId(newCustomerID.getId());
+                    repo.save(deserializedCustomerObject);
+
+                    return "Customer was registered";
+                }
+
+                else{
+                    return "email already registered";
+                }
+
+        }
+        //System.out.println(" [x] Received request for " + n);
+        //System.out.println("getCustomers() - WAS CALLED BY RabbitMQ RPC call");
+        //List<CustomerAttribute> allCustomer = (List<CustomerAttribute>) repo.findAll();
+        //return allCustomer;
+        //return customerAttribute.SerializeToString((Serializable) allCustomer);
+        return null;
     }
 
+
+/*
     @GetMapping("v1/Customers/login")
     Session getCustomer(@RequestParam String email, @RequestParam String passwordHash) {
 
@@ -45,6 +119,9 @@ public class CustomerController {
         }
     }
 
+ */
+
+    /*
     @GetMapping("v1/Customers/logout")
     String deleteSession(@RequestBody Integer session) {
         if (Sessions.contains(session))
@@ -58,6 +135,9 @@ public class CustomerController {
         }
     }
 
+     */
+
+    /*
     @PostMapping("v1/Customers/register")
     String registerCustomer(@RequestBody CustomerAttribute newCustomer) {
         if(repo.findByEmail(newCustomer.getEmail()).isEmpty()) {
@@ -72,6 +152,18 @@ public class CustomerController {
             return "email already registered";
         }
     }
+
+     */
+
+
+
+
+
+
+
+
+
+
 
 //TODO Change User attributes later on
 
