@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 //@RestController
@@ -87,6 +88,31 @@ public class CustomerController {
 
                 else{
                     return "email already registered";
+                }
+
+            case "customerFindById":
+                System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
+
+                Optional<CustomerAttribute> foundCustomer = repo.findById(String.valueOf(deserializedCustomerObject.getId()));
+
+                if(foundCustomer.isPresent()) {
+
+                    return customerAttribute.serializeToString(foundCustomer.get());
+                }
+                else{
+                    return null;
+                }
+            case "saveCustomer":
+                System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
+
+                CustomerAttribute savedCustomer = repo.save(deserializedCustomerObject);
+
+                //TODO not sure if the if is right
+                if (!savedCustomer.equals(deserializedCustomerObject)) {
+                    return null;
+                }
+                else {
+                    return customerAttribute.serializeToString(savedCustomer);
                 }
 
         }
