@@ -25,7 +25,6 @@ public class CustomerController {
 
     @Autowired
     private CustomerRepository repo;
-    static List<Session> Sessions = new ArrayList<>();
     static int lastSessionId =0;
 
 
@@ -50,16 +49,17 @@ public class CustomerController {
 
                 if(Objects.equals(Customer.getPassword(), deserializedCustomerObject.getPasswordHash())) {
 
-                    Session newSession = new Session(lastSessionId, deserializedCustomerObject.getEmail());
-                    Sessions.add(newSession);
-                    lastSessionId++;
+                    //Session newSession = new Session(lastSessionId, deserializedCustomerObject.getEmail());
+                    //Sessions.add(newSession);
+                    //lastSessionId++;
 
-                    return Session.serializeToString(newSession);
+                    return customerAttribute.serializeToString(Customer);
                 }
                 else{
                     return null;
                 }
-
+            /*
+            //WAS CHANGED to Jwt Auth not needed anymore
             case "deleteSession":
                 System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
 
@@ -74,7 +74,7 @@ public class CustomerController {
                 {
                     return "no session under that id";
                 }
-
+             */
             case "registerCustomer":
                 System.out.println(deserializedCustomerObject.getFunctionCallName() + " function - WAS CALLED BY RabbitMQ RPC call");
 
