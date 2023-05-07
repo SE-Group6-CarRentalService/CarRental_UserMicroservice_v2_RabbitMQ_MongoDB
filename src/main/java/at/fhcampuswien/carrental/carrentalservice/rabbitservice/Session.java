@@ -1,8 +1,7 @@
-package at.fhcampuswien.carrental.carrentalservice.restservice;
+package at.fhcampuswien.carrental.carrentalservice.rabbitservice;
 
 import java.io.*;
 import java.util.Base64;
-import java.util.Date;
 
 public class Session implements Serializable {
     private int sessionID;
@@ -29,7 +28,7 @@ public class Session implements Serializable {
         this.accountMail = accountMail;
     }
 
-    //Deserialize object to a Base64 string
+    //Deserialize object to Base64 string
     public static Object deserializeFromString( String s ) throws IOException,
             ClassNotFoundException {
         byte [] data = Base64.getDecoder().decode( s );
@@ -40,7 +39,7 @@ public class Session implements Serializable {
         return o;
     }
 
-    //Serialize object to a Base64 string
+    //Serialize object to Base64 string
     public static String serializeToString( Serializable o ) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream( baos );

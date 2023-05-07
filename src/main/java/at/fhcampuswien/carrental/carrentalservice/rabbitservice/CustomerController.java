@@ -1,12 +1,11 @@
-package at.fhcampuswien.carrental.carrentalservice.restservice;
+package at.fhcampuswien.carrental.carrentalservice.rabbitservice;
 
 
 import at.fhcampuswien.carrental.carrentalservice.entity.CustomerAttribute;
 import at.fhcampuswien.carrental.carrentalservice.repository.CustomerRepository;
-import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -16,7 +15,8 @@ import java.util.List;
 import java.util.Objects;
 
 
-@RestController
+//@RestController
+@Controller
 @CrossOrigin(origins = "*")
 public class CustomerController {
 
@@ -29,7 +29,7 @@ public class CustomerController {
 
 
     @RabbitListener(queues = "carRental.rpc.requests")
-    @GetMapping("v1/Customers")
+    //@GetMapping("v1/Customers")
     public String carRentalRpcFunctionCall(String serializedCustomerObjectWithFunctionInfoAddition) throws IOException, ClassNotFoundException {
 
         CustomerAttribute deserializedCustomerObject = (CustomerAttribute) CustomerAttribute.deserializeFromString(serializedCustomerObjectWithFunctionInfoAddition);
