@@ -13,8 +13,9 @@ import java.util.Optional;
 
 
 @Repository
-public interface CustomerRepository extends MongoRepository<CustomerAttribute, String> {
+public interface CustomerRepository extends MongoRepository<CustomerAttribute, Integer> {
     List<CustomerAttribute> findByEmail(String email);
+
 }
 /*
 @Repository
